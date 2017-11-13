@@ -7,7 +7,7 @@ Model Predictive Control reframes the task of following a trajectory as an optim
 
 In a real car, an actuation command won't execute instantly - there will be a delay as the command propagates through the system. A realistic delay might be on the order of 100 milliseconds. This is a problem called "latency", and it's a difficult challenge for some controllers - like a PID controller - to overcome. But a Model Predictive Controller can adapt quite well because we can model this latency in the system.
 
-##### The Model:
+#### The Model:
 
 The current implementation uses Kinematic model based equations as shown in the image below.
 
@@ -17,7 +17,7 @@ Lf measures the distance between the front of the vehicle and its center of grav
 
 Control inputs are: [δ,a]
 
-##### Timestep Length and Elapsed Duration (N & dt):
+#### Timestep Length and Elapsed Duration (N & dt):
 
 The prediction horizon is the duration over which future predictions are made. We’ll refer to this as T.
 
@@ -26,20 +26,20 @@ T is the product of two other variables, N and dt.
 + N is the number of timesteps in the horizon.
 + dt is how much time elapses between actuations. 
 
-For example, if N were 20 and dt were 0.5, then T would be 10 seconds.
+For example, we have chosen N as 10 and dt as 0.1, then T would be 1 second.
 
-N, dt, and T are hyperparameters those need to be tuned. T should be as large as possible, while dt should be as small as possible.
+N, dt, and T are hyperparameters those are manually tuned. T should be as large as possible, while dt should be as small as possible.
 
 The goal of Model Predictive Control is to optimize the control inputs: [δ,a]. The optimizer will tune these inputs until a low cost vector of control inputs is found. The length of this vector is determined by N. Thus N determines the number of variables optimized by the MPC. This is also the major driver of computational cost.
 
 MPC attempts to approximate a continuous reference trajectory by means of discrete paths between actuations. Larger values of dt result in less frequent actuations, which makes it harder to accurately approximate a continuous reference trajectory. This is sometimes called "discretization error".
 
 
-##### Polynomial Fitting and MPC Preprocessing:
+#### Polynomial Fitting and MPC Preprocessing:
 
 Third Degree polynomial is fitted to the waypoints provided by simulator after transforming them to car coordinate system. The polynomial coefficients are then used to calculate cte and epsi. These are used by solver as well to create ref trajectory.
 
-##### Model Predictive Control with Latency:
+#### Model Predictive Control with Latency:
 
 We compute the state with the delay (100ms) factored in using our kinematic model before feeding it to the object that will solve for what we should do next.
 
