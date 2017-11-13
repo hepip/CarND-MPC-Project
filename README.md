@@ -11,7 +11,7 @@ In a real car, an actuation command won't execute instantly - there will be a de
 
 The current implementation uses Kinematic model based equations as shown in the image below.
 
-![Alt text](images/model.png =100x50)
+![Alt text](images/model.png =100*50)
 
 Lf measures the distance between the front of the vehicle and its center of gravity. The larger the vehicle, the slower the turn rate.
 
